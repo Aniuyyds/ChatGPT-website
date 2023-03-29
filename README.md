@@ -17,7 +17,7 @@
 3.  使用现有开源api代理，则只需在settings.py配置文件中加入自己的 openai 的api key即可，然后部署到大陆服务器就行！如有条件部署到国外服务器，请使用settings.py配置文件中的 openai 官方api接口。
 
 #### 注意
-1.  如果此小项目帮助到了您，希望能得到您的star!
+1.  拒绝白嫖，如果此小项目帮助到了您，希望能得到您的star!
 2.  项目开源代理：[https://github.com/geekr-dev/openai-proxy](https://github.com/geekr-dev/openai-proxy) 点个 Star 支持作者
 3.  此项目适合小白，主打简洁，可不断完善！
 4.  对于项目如有疑问，可点击项目页面“@联系我”，在我的博客中私信！
