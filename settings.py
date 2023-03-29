@@ -3,7 +3,7 @@
 # SECRET_KEY
 SECRET_KEY = "asghnjadfbtywyn"
 # # chatgpt api 密钥
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = ""
 
 # openai 官方api
 # URL = "https://api.openai.com/v1/chat/completions"

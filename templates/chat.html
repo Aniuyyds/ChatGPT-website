@@ -4,160 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="images/x-icon" href="../static/images/favicon.ico">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
     <title>chat</title>
-    <style>
-        .answer{
-          width: 100%;
-          position: relative;
-          height: 70vh;
-        }
-
-        .answer .ipt{
-          display:flex;
-          align-items: center;
-          position: absolute;
-          bottom: 40px;
-          margin: 0 15px;
-          padding-right: 15px;
-          border-radius: 15px;
-          width: calc(100% - 30px);
-          height: 50px;
-          border: 1px solid #e7eaec;
-        }
-        .answer .ipt textarea {
-          resize: none;
-          overflow-y: auto;
-          border: none;
-          box-shadow: none;
-        }
-        .answer .ipt textarea:focus{
-          border: none !important;
-          box-shadow: none !important;
-        }
-
-        .answer #chatWindow {
-          max-height: calc(70vh - 120px);
-          height:auto;
-          overflow-y: auto;
-        }
-
-        .answer #chatWindow .message-bubble {
-          padding: 10px;
-          margin: 5px;
-          display: flex;
-          align-items: flex-start;
-          border-bottom: 1px dashed #e7eaec;
-        }
-
-
-        .answer #chatWindow .message-bubble p {
-          font-size: 18px;
-          margin-left:15px;
-        }
-
-        .answer .chat-icon {
-          width: 30px;
-          height: 30px;
-          border-radius: 3px;
-        }
-
-        .answer #chatBtn{
-          background-color: #1ab394;
-          border-color: #1ab394;
-        }
-    </style>
 </head>
 <body>
-    <div>
-      <div class="row">
-          <div class="col-xs-12">
-            <div>
-              <h1 class="text-center m-b-lg">Chat with ChatGPT</h1>
-            </div>
-            <div class="answer">
-              <div id="chatWindow" class="mb-3"></div>
-              <div class="input-group ipt">
-                <div class="col-xs-12">
-                  <textarea id="chatInput" class="form-control" rows="1"></textarea>
-                </div>
-                <button id="chatBtn" class="btn btn-primary" type="button">Go !</button>
+    <div class="row">
+      <div class="col-xs-12">
+        <div>
+            <h1 class="text-center m-b-lg">Chat with ChatGPT</h1>
+        </div>
+        <div class="answer">
+          <div id="chatWindow" class="mb-3"></div>
+            <div class="input-group ipt">
+              <div class="col-xs-12">
+                <textarea id="chatInput" class="form-control" rows="1"></textarea>
               </div>
+              <button id="chatBtn" class="btn btn-primary" type="button">Go !</button>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <footer style="margin-top: 10px;">
+      <p class="lead text-center">“抢走工作的不会是AI,而是率先掌握AI能力的人”</p>
+      <p class="lead text-center" style="margin-bottom: 0;"><a href="https://blog.csdn.net/qq_57421630" style="color:red;text-decoration:none;">@联系我</a></p>
+    </footer>
 </body>
-<footer>
-  <p class="lead text-center">“抢走工作的不会是AI,而是率先掌握AI能力的人”</p>
-  <p class="lead text-center"><a href="https://blog.csdn.net/qq_57421630" style="color:red;text-decoration:none;">@联系我</a></p>
-</footer>
 <script src="../static/js/jquery-2.1.1.js"></script>
 <script src="../static/js/bootstrap.min.js"></script>
 <script src="../static/js/layer/layer.js"></script>
 <script src="../static/js/common.js"></script>
-<script>
-    $(document).ready(function() {
-        var chatBtn = $('#chatBtn');
-        var chatInput = $('#chatInput');
-        var chatWindow = $('#chatWindow');
-
-        var messages = [] // 存储对话信息
-
-        // 添加用户消息到窗口
-        function addUserMessage(message) {
-          var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/avatar.png"><p class="message-text">' + message + '</p></div>');
-          chatWindow.append(messageElement);
-          chatInput.val('');
-          chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
-        }
-
-        // 添加回复消息到窗口
-        function addBotMessage(message) {
-          var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/chatgpt.png"><p class="message-text">' + message + '</p></div>');
-          chatWindow.append(messageElement);
-          chatInput.val('');
-          chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
-        }
-
-        // 处理用户输入
-        chatBtn.click(function() {
-          var message = chatInput.val();
-          if (message.length == 0){
-            common_ops.alert("请输入内容！")
-            return
-          }
-
-          addUserMessage(message);
-
-          // 将用户消息保存到数组
-          messages.push({"role": "user", "content": message})
-
-          // 收到回复前让按钮不可点击
-          chatBtn.attr('disabled',true)
-
-          // 发送信息到后台
-          $.ajax({
-            url: '/chat',
-            method: 'POST',
-            data: {
-              "prompt": JSON.stringify(messages)
-            },
-            success: function(res) {
-              addBotMessage(res.content);
-              // 收到回复，让按钮可点击
-              chatBtn.attr('disabled',false)
-              // 将回复添加到数组
-              messages.push(res)
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-              addBotMessage('<span style="color:red;">' + '出错啦！请稍后再试!' + '</span>');
-              chatBtn.attr('disabled',false)
-              messages.pop() // 失败就让用户输入信息从数组删除
-            }
-          });
-        });
-  });
-</script>
+<script src="../static/js/custom.js"></script>
 </html>

@@ -1,0 +1,74 @@
+@media screen and (max-width: 768px){
+    html{
+     width: 100% !important;
+    }
+  }
+
+  @media screen and (min-width: 768px){
+    html{
+      width: 80% !important;
+      margin: 0 auto;
+    }
+  }
+         
+  .answer{
+    width: 100%;
+    position: relative;
+    height: 75vh;
+  }
+
+  .answer .ipt{
+    display:flex;
+    align-items: center;
+    position: absolute;
+    bottom: 20px;
+    margin: 0 15px;
+    padding-right: 15px;
+    border-radius: 10px;
+    width: calc(100% - 30px);
+    height: 50px;
+    border: 1px solid #e7eaec;
+    box-shadow: 0px 0px 10px 0px rgba(154, 152, 152, 0.2);
+  }
+  .answer .ipt textarea {
+    resize: none;
+    overflow-y: auto;
+    border: none;
+    box-shadow:none;
+  }
+  .answer .ipt textarea:focus{
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .answer #chatWindow {
+    max-height: calc(75vh - 100px);
+    height:auto;
+    overflow-y: auto;
+  }
+
+  .answer #chatWindow .message-bubble {
+    padding: 10px;
+    margin: 5px;
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px dashed #e7eaec;
+  }
+
+
+  .answer #chatWindow .message-bubble p {
+    font-size: 18px;
+    margin-left:15px;
+    white-space: pre-wrap;
+  }
+
+  .answer .chat-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+  }
+
+  .answer #chatBtn{
+    background-color: #1ab394;
+    border-color: #1ab394;
+  }
