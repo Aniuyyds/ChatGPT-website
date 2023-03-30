@@ -56,7 +56,7 @@
   }
 
 
-  .answer #chatWindow .message-bubble p {
+  .answer #chatWindow .message-bubble .message-text{
     font-size: 18px;
     margin-left:15px;
     white-space: pre-wrap;

@@ -45,33 +45,49 @@ $(document).ready(function() {
     var chatInput = $('#chatInput');
     var chatWindow = $('#chatWindow');
 
-    var messages = [] // 存储对话信息
+    // 存储对话信息,实现连续对话
+    var messages = []
 
-    // 添加用户消息到窗口
-    function addUserMessage(message) {
-      var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/avatar.png"><p class="message-text">' + message + '</p></div>');
+    // 转义html代码，防止在浏览器渲染
+    function escapeHtml(html) {
+      var text = document.createTextNode(html);
+      var div = document.createElement('div');
+      div.appendChild(text);
+      return div.innerHTML;
+    }
+
+    // 添加消息到窗口,对message进行转义，防止html被浏览器渲染
+    function addMessage(message,imgName) {
+      var escapedMessage = escapeHtml(message);
+      var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/' + imgName + '"><p class="message-text">' +  escapedMessage + '</p></div>');
       chatWindow.append(messageElement);
       chatInput.val('');
       chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
     }
 
-    // 添加回复消息到窗口
-    function addBotMessage(message) {
-      var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/chatgpt.png"><p class="message-text">' + message + '</p></div>');
+
+    // 请求失败不用转义html
+    function addFailMessage(message) {
+      var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/chatgpt.png"><p class="message-text">' +  message + '</p></div>');
       chatWindow.append(messageElement);
       chatInput.val('');
       chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
     }
-
+    
     // 处理用户输入
     chatBtn.click(function() {
+      // 解绑键盘事件
+      chatInput.off("keydown",handleEnter);
+      
       var message = chatInput.val();
+      
       if (message.length == 0){
         common_ops.alert("请输入内容！")
         return
       }
 
-      addUserMessage(message);
+
+      addMessage(message,"avatar.png");
 
       // 将用户消息保存到数组
       messages.push({"role": "user", "content": message})
@@ -87,17 +103,30 @@ $(document).ready(function() {
           "prompt": JSON.stringify(messages)
         },
         success: function(res) {
-          addBotMessage(res.content);
+          addMessage(res.content,"chatgpt.png");
           // 收到回复，让按钮可点击
           chatBtn.attr('disabled',false)
+          // 重新绑定键盘事件
+          chatInput.on("keydown",handleEnter);
           // 将回复添加到数组
           messages.push(res)
         },
         error: function(jqXHR, textStatus, errorThrown) {
-          addBotMessage('<span style="color:red;">' + '出错啦！请稍后再试!' + '</span>');
+          addFailMessage('<span style="color:red;">' + '出错啦！请稍后再试!' + '</span>');
           chatBtn.attr('disabled',false)
+          chatInput.on("keydown",handleEnter);
           messages.pop() // 失败就让用户输入信息从数组删除
         }
       });
     });
+
+    // Enter键盘事件
+    function handleEnter(e){
+      if (e.keyCode==13){
+        chatBtn.click();
+      }
+    }
+
+    // 绑定Enter键盘事件
+    chatInput.on("keydown",handleEnter);
 });
