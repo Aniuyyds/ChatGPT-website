@@ -10,11 +10,25 @@
       margin: 0 auto;
     }
   }
-         
+  .title h2{
+    margin-bottom: 20px;
+  }
+  .key{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+
+  .key input:focus {
+    border-color: #1ab394;
+  }  
+      
   .answer{
     width: 100%;
     position: relative;
-    height: 75vh;
+    height: 70vh;
   }
 
   .answer .ipt{
@@ -42,7 +56,7 @@
   }
 
   .answer #chatWindow {
-    max-height: calc(75vh - 100px);
+    max-height: calc(70vh - 100px);
     height:auto;
     overflow-y: auto;
   }
