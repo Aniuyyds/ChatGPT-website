@@ -86,7 +86,11 @@ $(document).ready(function() {
     if ($(".key .ipt-1").prop("checked")){
       var apiKey = $(".key .ipt-2").val();
       if (apiKey.length < 20 ){
-          common_ops.alert("请输入正确的 api key ！")
+          common_ops.alert("请输入正确的 api key ！",function(){
+            chatInput.val('');
+            // 重新绑定键盘事件
+            chatInput.on("keydown",handleEnter);
+          })
           return
       }else{
         data["apiKey"] = apiKey
@@ -96,7 +100,11 @@ $(document).ready(function() {
 
     var message = chatInput.val();
     if (message.length == 0){
-      common_ops.alert("请输入内容！")
+      common_ops.alert("请输入内容！",function(){
+        chatInput.val('');
+        // 重新绑定键盘事件
+        chatInput.on("keydown",handleEnter);
+      })
       return
     }
 
