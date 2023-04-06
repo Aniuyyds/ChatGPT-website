@@ -1,18 +1,22 @@
 @media screen and (max-width: 768px){
-    html{
+    body{
      width: 100% !important;
     }
   }
 
   @media screen and (min-width: 768px){
-    html{
+    body{
       width: 80% !important;
       margin: 0 auto;
     }
   }
+
   .title h2{
     margin-bottom: 20px;
+    color: #1ab394;
+    text-shadow:0px 0px 2px #7defd8;
   }
+
   .key{
     width: 100%;
     display: flex;
@@ -29,6 +33,22 @@
     width: 100%;
     position: relative;
     height: 70vh;
+  }
+
+  .answer .tips{
+    display: block;
+  }
+
+  .answer .tips h3{
+    color:red;
+  }
+
+  .answer .tips img{
+    margin-top: 30px;
+    border:1px solid #49bea6;
+    box-shadow: 0px 0px 10px 0px #7defd8;
+    border-radius: 10px;
+    width: 200px;
   }
 
   .answer .ipt{
