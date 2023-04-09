@@ -23,7 +23,7 @@
 4.  对于项目如有疑问，可点击项目页面“@联系我”，在我的博客中私信！
 5.  此项目为紧急搭建，会不断完善页面效果！
 6.  部署教程：https://blog.csdn.net/qq_57421630/article/details/129913170
-
+7.  项目纯前端版本（零成本部署）：https://gitee.com/aniu-666/chat-gpt-website/tree/web/
 #### 项目效果
 
 ![输入图片说明](%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE%E7%89%87.png)
