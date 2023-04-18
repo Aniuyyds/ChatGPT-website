@@ -92,11 +92,10 @@
   border-bottom: 1px dashed #e7eaec;
 }
 
-
 .answer #chatWindow .message-bubble .message-text{
   font-size: 18px;
   margin-left:15px;
-  white-space: pre-wrap;
+  white-space: normal;
 }
 
 .answer .chat-icon {

@@ -39,6 +39,5 @@ def chat():
     resp = requests.post(url=app.config["URL"], headers=headers, json=data).json()
     return jsonify(resp["choices"][0]["message"])
 
-
 if __name__ == '__main__':
     app.run(port=5000)

@@ -38,7 +38,6 @@ var common_ops = {
   }
 };
 
-
 // 功能
 $(document).ready(function() {
   var chatBtn = $('#chatBtn');
@@ -56,16 +55,20 @@ $(document).ready(function() {
     return div.innerHTML;
   }
 
-  // 添加消息到窗口,对message进行转义，防止html被浏览器渲染
+  /// 添加消息到窗口
   function addMessage(message,imgName) {
     $(".answer .tips").css({"display":"none"});    // 打赏卡隐藏
     chatInput.val('');
-    var escapedMessage = escapeHtml(message);
-    var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/' + imgName + '"><p class="message-text">' +  escapedMessage + '</p></div>');
+    var escapedMessage;
+    if (imgName == "avatar.png"){
+      escapedMessage= escapeHtml(message);  // 对请求message进行转义，防止输入的是html而被浏览器渲染
+    }else if(imgName == "chatgpt.png"){
+      escapedMessage= marked(message);  // 使用marked.js对响应message的markdown格式转换为html
+    }
+    var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/' + imgName + '"><div class="message-text">' +  escapedMessage + '</div></div>');
     chatWindow.append(messageElement);
     chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
   }
-
 
   // 请求失败不用转义html
   function addFailMessage(message) {
@@ -97,7 +100,6 @@ $(document).ready(function() {
       }else{
         data["apiKey"] = apiKey
       }
-
     }
 
     var message = chatInput.val();
@@ -109,7 +111,6 @@ $(document).ready(function() {
       })
       return
     }
-
 
     addMessage(message,"avatar.png");
 
