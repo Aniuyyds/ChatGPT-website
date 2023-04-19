@@ -5,6 +5,9 @@
   .foot p:first-child{
     font-size: 14px !important;
   }
+  .foot p a{
+    font-size: 13px !important;
+  }
 }
 
 @media screen and (min-width: 768px){
@@ -84,7 +87,7 @@
   overflow-y: auto;
 }
 
-.answer #chatWindow .message-bubble {
+.message-bubble {
   padding: 10px;
   margin: 5px;
   display: flex;
@@ -92,10 +95,18 @@
   border-bottom: 1px dashed #e7eaec;
 }
 
-.answer #chatWindow .message-bubble .message-text{
+.message-bubble .message-text{
   font-size: 18px;
   margin-left:15px;
   white-space: normal;
+}
+
+.message-bubble .error p{
+  color:red;
+  height:auto;
+  display: block;
+  white-space: pre-wrap;
+  word-break:break-all;
 }
 
 .answer .chat-icon {
@@ -115,4 +126,11 @@
 
 .foot p:nth-child(2){
   margin-bottom: 0;
+}
+
+.foot p a{
+  font-weight: 400;
+  font-size: 14px;
+  color:red;
+  text-decoration:none;
 }

@@ -74,7 +74,7 @@ $(document).ready(function() {
   function addFailMessage(message) {
     $(".answer .tips").css({"display":"none"});      // 打赏卡隐藏
     chatInput.val('');
-    var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/chatgpt.png"><p class="message-text">' +  message + '</p></div>');
+    var messageElement = $('<div class="row message-bubble"><img class="chat-icon" src="../static/images/chatgpt.png"><div class="message-text error">' +  message + '</div></div>');
     chatWindow.append(messageElement);
     chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
   }
@@ -128,16 +128,23 @@ $(document).ready(function() {
       method: 'POST',
       data: data,
       success: function(res) {
-        addMessage(res.content,"chatgpt.png");
-        // 收到回复，让按钮可点击
-        chatBtn.attr('disabled',false)
-        // 重新绑定键盘事件
-        chatInput.on("keydown",handleEnter);
-        // 将回复添加到数组
-        messages.push(res)
+        if(res.hasOwnProperty("error")){
+          addFailMessage('<p>' + res.error.type + ": " + res.error.message + '</p>');
+          chatBtn.attr('disabled',false)
+          chatInput.on("keydown",handleEnter);
+          messages.pop() // 失败就让用户输入信息从数组删除
+        }else{
+          addMessage(res.content,"chatgpt.png");
+          // 收到回复，让按钮可点击
+          chatBtn.attr('disabled',false)
+          // 重新绑定键盘事件
+          chatInput.on("keydown",handleEnter);
+          // 将回复添加到数组
+          messages.push(res)
+        }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        addFailMessage('<span style="color:red;">' + '出错啦！请稍后再试!' + '</span>');
+        addFailMessage('<p>' + '出错啦！请稍后再试!' + '</p>');
         chatBtn.attr('disabled',false)
         chatInput.on("keydown",handleEnter);
         messages.pop() // 失败就让用户输入信息从数组删除
@@ -149,6 +156,7 @@ $(document).ready(function() {
   function handleEnter(e){
     if (e.keyCode==13){
       chatBtn.click();
+      e.preventDefault();  //避免回车换行
     }
   }
 
