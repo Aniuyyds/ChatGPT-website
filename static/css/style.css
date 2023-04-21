@@ -102,7 +102,17 @@
   word-break:break-all;
 }
 
-.message-bubble .error p{
+.message-bubble .response .loading img{
+  width:50px;
+}
+
+/* markdown转html样式bug修改*/
+.message-bubble .response ol{
+  list-style-type: circle; /* 将数字标号改为空心圆点 */
+}
+
+/* 错误信息样式 */
+.message-bubble .message-text p.error{
   color:red;
   height:auto;
   display: block;
