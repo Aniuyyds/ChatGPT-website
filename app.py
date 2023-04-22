@@ -8,11 +8,9 @@ app = Flask(__name__)
 # 从配置文件中settings加载配置
 app.config.from_pyfile('settings.py')
 
-
 @app.route("/", methods=["GET"])
 def index():
     return render_template("chat.html")
-
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -74,4 +72,4 @@ def chat():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5000)

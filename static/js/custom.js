@@ -43,17 +43,26 @@ $(document).ready(function() {
   var chatBtn = $('#chatBtn');
   var chatInput = $('#chatInput');
   var chatWindow = $('#chatWindow');
+  
   // 存储对话信息,实现连续对话
-  var messages = []
+  var messages = [];
 
-  // 转义html代码，防止在浏览器渲染
+  // 检测是否是html代码的标志变量
+  var checkHtmlFlag = false;
+
+  // 转义html代码(对应字符转移为html实体)，防止在浏览器渲染
   function escapeHtml(html) {
-    var text = document.createTextNode(html);
-    var div = document.createElement('div');
+    let text = document.createTextNode(html);
+    let div = document.createElement('div');
     div.appendChild(text);
     return div.innerHTML;
   }
 
+  // 判断输出内容是否包含html标签
+  function checkHtmlTag(str) {
+    let pattern = /<\s*\/?\s*[a-z]+(?:\s+[a-z]+=(?:"[^"]*"|'[^']*'))*\s*\/?\s*>/i;  // 匹配HTML标签的正则表达式
+    return pattern.test(str); // 返回匹配结果
+  }
   
   // 添加请求消息到窗口
   function addRequestMessage(message) {
@@ -66,11 +75,18 @@ $(document).ready(function() {
     chatWindow.append(responseMessageElement);
     chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
   }
-  // 添加响应消息到窗口
+  
+  // 添加响应消息到窗口,流式响应此方法会执行多次
   function addResponseMessage(message) {
     let lastResponseElement = $(".message-bubble .response").last();
     lastResponseElement.empty();
-    let escapedMessage = marked(message)  // 响应消息markdown实时转换为html
+    let escapedMessage;
+    if(checkHtmlTag(message)){  // 如果是html代码
+      escapedMessage = marked(escapeHtml(message)); 
+      checkHtmlFlag = true;  
+    }else{
+      escapedMessage = marked(message);  // 响应消息markdown实时转换为html
+    }
     lastResponseElement.append(escapedMessage);
     chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
   }
@@ -90,7 +106,13 @@ $(document).ready(function() {
     chatInput.off("keydown",handleEnter);
     
     // ajax上传数据
-    let data = {}
+    let data = {};
+
+    // 判断消息是否是正常的标志变量
+    let resFlag = true;
+
+    // 接收输入信息变量
+    let message;
    
     // 判断是否使用自己的api key
     if ($(".key .ipt-1").prop("checked")){
@@ -107,7 +129,8 @@ $(document).ready(function() {
       }
     }
 
-    let message = chatInput.val();
+    message = chatInput.val();
+    
     if (message.length == 0){
       common_ops.alert("请输入内容！",function(){
         chatInput.val('');
@@ -129,14 +152,14 @@ $(document).ready(function() {
       method: 'POST',
       data: data,
       xhrFields: {
-        prevResponseLength : 0,
         onprogress: function(e) {
           var res = e.target.responseText;
           let resJsonObj;
           try{
-            resJsonObj = JSON.parse(res);  // 只有错误信息是json类型字符串
+            resJsonObj = JSON.parse(res);  // 只有错误信息是json类型字符串,且一次返回
             if(resJsonObj.hasOwnProperty("error")){
               addFailMessage('<p class="error">' + resJsonObj.error.type + " : " + resJsonObj.error.message + '</p>');
+              resFlag = false;
             }else{
               addResponseMessage(res);
             }
@@ -146,17 +169,26 @@ $(document).ready(function() {
         }
       },
       success:function(res){
-        // 收到回复，让按钮可点击
-        chatBtn.attr('disabled',false)
-        // 重新绑定键盘事件
-        chatInput.on("keydown",handleEnter);
         // 将最终回复添加到数组
-        messages.push({"role": "assistant", "content": res})
+        if (resFlag) {
+          messages.push({"role": "assistant", "content": res})
+        }
       },
       error: function(jqXHR, textStatus, errorThrown) {
         addFailMessage('<p class="error">' + '出错啦！请稍后再试!' + '</p>');
-        chatBtn.attr('disabled',false)
-        chatInput.on("keydown",handleEnter);
+      },
+      complete : function(XMLHttpRequest,status){ 
+         // 收到回复，让按钮可点击
+         chatBtn.attr('disabled',false)
+         // 重新绑定键盘事件
+         chatInput.on("keydown",handleEnter); 
+         
+         if (checkHtmlFlag) {
+            let lastResponseElement = $(".message-bubble .response").last();
+            let lastResponseHtml = lastResponseElement.html();
+            let newLastResponseHtml = lastResponseHtml.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, "\"");
+            lastResponseElement.html(newLastResponseHtml);
+         }
       }
     });
   });
