@@ -69,9 +69,9 @@ $(document).ready(function() {
     $(".answer .tips").css({"display":"none"});    // 打赏卡隐藏
     chatInput.val('');
     let escapedMessage = escapeHtml(message);  // 对请求message进行转义，防止输入的是html而被浏览器渲染
-    let requestMessageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/avatar.png"><div class="message-text resquest">' +  escapedMessage + '</div></div>');
+    let requestMessageElement = $('<div class="row message-bubble"><span class="request-icon"></span><div class="message-text request">' +  escapedMessage + '</div></div>');
     chatWindow.append(requestMessageElement);
-    let responseMessageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/chatgpt.png"><div class="message-text response"><div class="loading"><img src="./static/images/loading.gif"></div></div></div>');
+    let responseMessageElement = $('<div class="row message-bubble"><img class="response-icon" src="./static/images/chatgpt.png"><div class="message-text response"><span class="loading-icon"></span></div></div>');
     chatWindow.append(responseMessageElement);
     chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
   }
@@ -83,7 +83,7 @@ $(document).ready(function() {
     let escapedMessage;
     if(checkHtmlTag(message)){  // 如果是html代码
       escapedMessage = marked(escapeHtml(message)); 
-      checkHtmlFlag = true;  
+      checkHtmlFlag = true;
     }else{
       escapedMessage = marked(message);  // 响应消息markdown实时转换为html
     }

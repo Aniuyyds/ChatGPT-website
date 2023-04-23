@@ -102,9 +102,6 @@
   word-break: break-all;
 }
 
-.message-bubble .response .loading img{
-  width:35px;
-}
 
 /* markdown转html样式bug修改*/
 .message-bubble .response ol{
@@ -120,10 +117,31 @@
   word-break: break-all;
 }
 
-.answer .chat-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 3px;
+.message-bubble .response-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 4px;
+}
+
+.message-bubble .request-icon {
+  display: block;
+  width: 35px;
+  height: 35px;
+  border-radius: 4px;
+  background-image: url(../images/avatar.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.message-bubble .response .loading-icon{
+  display: block;
+  width:35px;
+  height:35px;
+  background-image: url(../images/loading.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .answer #chatBtn{
