@@ -69,9 +69,9 @@ $(document).ready(function() {
     $(".answer .tips").css({"display":"none"});    // 打赏卡隐藏
     chatInput.val('');
     let escapedMessage = escapeHtml(message);  // 对请求message进行转义，防止输入的是html而被浏览器渲染
-    let requestMessageElement = $('<div class="row message-bubble"><span class="request-icon"></span><div class="message-text request">' +  escapedMessage + '</div></div>');
+    let requestMessageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/avatar.png"><div class="message-text request">' +  escapedMessage + '</div></div>');
     chatWindow.append(requestMessageElement);
-    let responseMessageElement = $('<div class="row message-bubble"><img class="response-icon" src="./static/images/chatgpt.png"><div class="message-text response"><span class="loading-icon"></span></div></div>');
+    let responseMessageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/chatgpt.png"><div class="message-text response"><span class="loading-icon"></span></div></div>');
     chatWindow.append(responseMessageElement);
     chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
   }
@@ -88,7 +88,7 @@ $(document).ready(function() {
       escapedMessage = marked(message);  // 响应消息markdown实时转换为html
     }
     lastResponseElement.append(escapedMessage);
-    chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
+    chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
   }
 
   // 添加失败信息到窗口
@@ -96,7 +96,7 @@ $(document).ready(function() {
     let lastResponseElement = $(".message-bubble .response").last();
     lastResponseElement.empty();
     lastResponseElement.append(message);
-    chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
+    chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
     messages.pop() // 失败就让用户输入信息从数组删除
   }
   

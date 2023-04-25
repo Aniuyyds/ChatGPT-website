@@ -117,21 +117,10 @@
   word-break: break-all;
 }
 
-.message-bubble .response-icon {
-  width: 35px;
-  height: 35px;
-  border-radius: 4px;
-}
-
-.message-bubble .request-icon {
-  display: block;
-  width: 35px;
-  height: 35px;
-  border-radius: 4px;
-  background-image: url(../images/avatar.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+.message-bubble .chat-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
 }
 
 .message-bubble .response .loading-icon{
