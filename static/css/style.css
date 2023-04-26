@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
 @media screen and (max-width: 768px){
   body{
     width: 100% !important;
@@ -98,14 +103,15 @@
 .message-bubble .message-text{
   font-size: 18px;
   margin-left:15px;
-  white-space: normal;
   word-break: break-all;
 }
 
+.message-bubble .message-text p{
+  white-space: pre-wrap;
+}
 
-/* markdown转html样式bug修改*/
-.message-bubble .response ol{
-  list-style-type: circle; /* 将数字标号改为空心圆点 */
+.message-bubble .response ol,ul{
+  padding-left: 2em;
 }
 
 /* 错误信息样式 */
@@ -113,7 +119,7 @@
   color:red;
   height:auto;
   display: block;
-  white-space: pre-wrap;
+  white-space: normal;
   word-break: break-all;
 }
 
