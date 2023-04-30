@@ -86,6 +86,7 @@ $(document).ready(function() {
       checkHtmlFlag = true;
     }else{
       escapedMessage = marked(message);  // 响应消息markdown实时转换为html
+      checkHtmlFlag = false;
     }
     lastResponseElement.append(escapedMessage);
     chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
@@ -153,7 +154,7 @@ $(document).ready(function() {
       data: data,
       xhrFields: {
         onprogress: function(e) {
-          var res = e.target.responseText;
+          let res = e.target.responseText;
           let resJsonObj;
           try{
             resJsonObj = JSON.parse(res);  // 只有错误信息是json类型字符串,且一次返回
@@ -177,8 +178,8 @@ $(document).ready(function() {
       error: function(jqXHR, textStatus, errorThrown) {
         addFailMessage('<p class="error">' + '出错啦！请稍后再试!' + '</p>');
       },
-      complete : function(XMLHttpRequest,status){ 
-         // 收到回复，让按钮可点击
+      complete : function(XMLHttpRequest,status){
+        // 收到回复，让按钮可点击
          chatBtn.attr('disabled',false)
          // 重新绑定键盘事件
          chatInput.on("keydown",handleEnter); 
