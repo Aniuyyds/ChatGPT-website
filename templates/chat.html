@@ -4,49 +4,108 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="images/x-icon" href="../static/images/favicon.ico">
+    <link rel="icon" type="images/x-icon" href="./static/images/favicon.ico">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
-    <title>chat</title>
+    <title>ChatGPT-website</title>
 </head>
 <body>
   <div class="container">
     <div class="row">
-      <div class="col-xs-12">
+      <div class="box col-xs-12">
         <div class="title">
-            <h2 class="text-center">ChatGPT-website</h2>
-        </div>
-        <div class="key">
-          <div class="input-group col-sm-6">
-            <span class="input-group-addon">
-              <input type="checkbox" class="ipt-1">
-            </span>
-            <input type="text" class="form-control ipt-2" placeholder="使用自己的api key">
-          </div>
+            <h2 class="text-center"><span style="margin-right: 10px;"><i class="fa fa-optin-monster fa-lg" aria-hidden="true"></i></span>ChatGPT-website</h2>
         </div>
         <div class="answer">
-          <div class="tips text-center">
-            <h3 class="lead">api key 告急！打赏支持本站！</h3>
+          <div class="tips">
+            <h4 class="text-center">欢迎！更多功能请点击下方设置按钮</h4>
             <img src="../static/images/reward.png">
           </div>
           <div id="chatWindow"></div>
-          <div class="input-group ipt">
-            <div class="col-xs-12">
-              <textarea id="chatInput" class="form-control" rows="1"></textarea>
+          <div class="function">
+            <div class="others">
+              <div class="left">
+                <div class="settings common dropup">
+                  <a class="dropdown-toggle icon-style" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="设置">
+                    <i class="fa fa-cogs fa-lg" aria-hidden="true"></i>
+                  </a>
+                  <div class="dropdown-menu" style="padding:0;" onclick="event.stopPropagation()">
+                    <div class="settings-common">
+                      <span><i class="fa fa fa-linode fa-lg" aria-hidden="true"></i>&nbsp; 主题</span>
+                      <select class="form-control ipt-common theme">
+                        <option value="light">light</option>
+                        <option value="gray">gray</option>
+                        <option value="light-red">light-red</option>
+                        <option value="light-blue">light-blue</option>
+                        <option value="light-purple">light-purple</option>
+                        <option value="light-green">light-green</option>
+                        <option value="light-yellow">light-yellow</option>
+                      </select>
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-key fa-lg" aria-hidden="true"></i>&nbsp; OpenAI Key</span>
+                      <input type="password" class="form-control ipt-common api-key" placeholder="可用自己的api key">
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-reddit-alien fa-lg" aria-hidden="true"></i>&nbsp; OpenAI 模型</span>
+                      <select class="form-control ipt-common">
+                        <option>gpt-3.5-turbo</option>
+                      </select>
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>&nbsp; 记录对话内容，刷新不会消失</span>
+                      <div class="chck-btn">
+                        <input id="chck-1" type="checkbox">
+                        <label for="chck-1" class="check-trail">
+                        <div class="check-handler"></div>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-retweet fa-lg" aria-hidden="true"></i>&nbsp; 开启连续对话，加倍消耗tokens</span>
+                      <div class="chck-btn">
+                        <input id="chck-2" type="checkbox">
+                        <label for="chck-2" class="check-trail">
+                        <div class="check-handler"></div>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="settings-common">
+                      <span style="font-size: 14px;"><i class="fa fa-qq fa-lg" aria-hidden="true"></i>&nbsp; 学习交流群</span>
+                      <span style="font-size: 14px;">QQ群：799160455</span>
+                    </div>
+                    <div class="settings-common">
+                      <a href="https://blog.csdn.net/qq_57421630" target="_blank"><i class="fa fa-link fa-lg" aria-hidden="true"></i>&nbsp; 联系我</a>
+                      <a href="https://gitee.com/aniu-666/chat-gpt-website" target="_blank"><i class="fa fa-github fa-lg" aria-hidden="true"></i>&nbsp; 项目地址</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="right">
+                <div class="screenshot common">
+                  <a class="icon-style" title="截图保存对话"><i class="fa fa-file-image-o fa-lg" aria-hidden="true"></i></a>
+                </div>
+                <div class="delete common">
+                  <a class="icon-style" title="删除历史记录"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
+                </div>
+              </div>
             </div>
-            <button id="chatBtn" class="btn btn-primary" type="button">Go !</button>
+            <div class="ipt">
+              <div class="col-xs-12">
+                <textarea id="chatInput" class="form-control" rows="1"></textarea>
+              </div>
+              <button id="chatBtn" class="btn btn-primary" type="button">Go !</button>
+            </div>
           </div>
         </div>
-        <div class="row foot">
-          <footer class="col-xs-12" style="margin-top: 10px;">
-            <p class="lead text-center">“抢走工作的不会是AI,而是率先掌握AI能力的人”</p>
-            <p class="lead text-center">
-              <a href="https://blog.csdn.net/qq_57421630" target="_blank">@联系我</a>
-              <span style="color:red;">|</span>
-              <a href="https://gitee.com/aniu-666/chat-gpt-website" target="_blank">项目地址</a>
-            </p>
-          </footer>
-        </div>
+        <footer class="foot" style="margin-top: 20px;">
+          <p class="lead text-center">“抢走工作的不会是AI,而是率先掌握AI能力的人”</p>
+          <p class="lead text-center">
+            <a href="https://blog.csdn.net/qq_57421630" target="_blank"><i class="fa fa-link fa-lg" aria-hidden="true"></i>&nbsp; 联系我</a>
+            <a href="https://gitee.com/aniu-666/chat-gpt-website" target="_blank"><i class="fa fa-github fa-lg" aria-hidden="true"></i>&nbsp; 项目地址</a>
+          </p>
+        </footer>
       </div>
     </div>
   </div>
@@ -54,6 +113,6 @@
 <script src="../static/js/jquery-2.1.1.js"></script>
 <script src="../static/js/bootstrap.min.js"></script>
 <script src="../static/js/marked.min.js"></script>
-<script src="../static/js/layer/layer.js"></script>
+<script src="../static/js/html2canvas.min.js"></script>
 <script src="../static/js/custom.js"></script>
 </html>

@@ -1,43 +1,3 @@
-// 封装弹窗layer组件等
-var common_ops = {
-  alert:function( msg ,cb ){
-      layer.alert( msg,{
-          yes:function( index ){
-              if( typeof cb == "function" ){
-                  cb();
-              }
-              layer.close( index );
-          }
-      });
-  },
-  confirm:function( msg,callback ){
-      callback = ( callback != undefined )?callback: { 'ok':null, 'cancel':null };
-      layer.confirm( msg , {
-          btn: ['确定','取消'] //按钮
-      }, function( index ){
-          //确定事件
-          if( typeof callback.ok == "function" ){
-              callback.ok();
-          }
-          layer.close( index );
-      }, function( index ){
-          //取消事件
-          if( typeof callback.cancel == "function" ){
-              callback.cancel();
-          }
-          layer.close( index );
-      });
-  },
-  tip:function( msg,target ){
-      layer.tips( msg, target, {
-          tips: [ 3, '#e5004f']
-      });
-      $('html, body').animate({
-          scrollTop: target.offset().top - 10
-      }, 100);
-  }
-};
-
 // 功能
 $(document).ready(function() {
   var chatBtn = $('#chatBtn');
@@ -63,6 +23,14 @@ $(document).ready(function() {
     let pattern = /<\s*\/?\s*[a-z]+(?:\s+[a-z]+=(?:"[^"]*"|'[^']*'))*\s*\/?\s*>/i;  // 匹配HTML标签的正则表达式
     return pattern.test(str); // 返回匹配结果
   }
+
+  // html实体转标签
+  function setHtml(){
+    let lastResponseElement = $(".message-bubble .response").last();
+    let lastResponseHtml = lastResponseElement.html();
+    let newLastResponseHtml = lastResponseHtml.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, "\"");
+    lastResponseElement.html(newLastResponseHtml);
+  }
   
   // 添加请求消息到窗口
   function addRequestMessage(message) {
@@ -71,9 +39,9 @@ $(document).ready(function() {
     let escapedMessage = escapeHtml(message);  // 对请求message进行转义，防止输入的是html而被浏览器渲染
     let requestMessageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/avatar.png"><div class="message-text request">' +  escapedMessage + '</div></div>');
     chatWindow.append(requestMessageElement);
-    let responseMessageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/chatgpt.png"><div class="message-text response"><span class="loading-icon"></span></div></div>');
+    let responseMessageElement = $('<div class="row message-bubble"><img class="chat-icon" src="./static/images/chatgpt.png"><div class="message-text response"><span class="loading-icon"><i class="fa fa-spinner fa-pulse fa-2x"></i></span></div></div>');
     chatWindow.append(responseMessageElement);
-    chatWindow.animate({ scrollTop: chatWindow.prop('scrollHeight') }, 500);
+    chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
   }
   
   // 添加响应消息到窗口,流式响应此方法会执行多次
@@ -96,7 +64,7 @@ $(document).ready(function() {
   function addFailMessage(message) {
     let lastResponseElement = $(".message-bubble .response").last();
     lastResponseElement.empty();
-    lastResponseElement.append(message);
+    lastResponseElement.append('<p class="error">' + message + '</p>');
     chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
     messages.pop() // 失败就让用户输入信息从数组删除
   }
@@ -111,34 +79,19 @@ $(document).ready(function() {
 
     // 判断消息是否是正常的标志变量
     let resFlag = true;
-
-    // 接收输入信息变量
-    let message;
    
     // 判断是否使用自己的api key
-    if ($(".key .ipt-1").prop("checked")){
-      let apiKey = $(".key .ipt-2").val();
-      if (apiKey.length < 20 ){
-          common_ops.alert("请输入正确的 api key ！",function(){
-            chatInput.val('');
-            // 重新绑定键盘事件
-            chatInput.on("keydown",handleEnter);
-          })
-          return
-      }else{
-        data["apiKey"] = apiKey
-      }
+    let apiKey = localStorage.getItem('apiKey');
+    if (apiKey){
+      data.apiKey = apiKey;
     }
 
-    message = chatInput.val();
-    
+    // 接收输入信息变量
+    let message = chatInput.val();
     if (message.length == 0){
-      common_ops.alert("请输入内容！",function(){
-        chatInput.val('');
-        // 重新绑定键盘事件
-        chatInput.on("keydown",handleEnter);
-      })
-      return
+      // 重新绑定键盘事件
+      chatInput.on("keydown",handleEnter);
+      return ;
     }
 
     addRequestMessage(message);
@@ -146,12 +99,34 @@ $(document).ready(function() {
     messages.push({"role": "user", "content": message})
     // 收到回复前让按钮不可点击
     chatBtn.attr('disabled',true)
-    data["prompt"] = JSON.stringify(messages)
+
+    if(messages.length>40){
+      addFailMessage("此次对话长度过长，请点击下方删除按钮清除对话内容！");
+      // 重新绑定键盘事件
+      chatInput.on("keydown",handleEnter);
+      chatBtn.attr('disabled',false) // 让按钮可点击
+      return ;
+    }
+    
+    // 判读是否已开启连续对话
+    if(localStorage.getItem('continuousDialogue') == 'true'){
+      // 控制上下文，对话长度超过4轮，取最新的3轮,即数组最后7条数据
+      data.prompts = messages.slice();  // 拷贝一份全局messages赋值给data.prompts,然后对data.prompts处理
+      if (data.prompts.length > 8) {
+        data.prompts.splice(0, data.prompts.length - 7);
+      }
+    }else{
+      data.prompts = messages.slice();
+      data.prompts.splice(0, data.prompts.length - 1); // 未开启连续对话，取最后一条
+    }
+    data.prompts = JSON.stringify(data.prompts);
+    
     // 发送信息到后台
     $.ajax({
       url: '/chat',
       method: 'POST',
       data: data,
+      timeout: 1000 * 60,
       xhrFields: {
         onprogress: function(e) {
           let res = e.target.responseText;
@@ -159,7 +134,7 @@ $(document).ready(function() {
           try{
             resJsonObj = JSON.parse(res);  // 只有错误信息是json类型字符串,且一次返回
             if(resJsonObj.hasOwnProperty("error")){
-              addFailMessage('<p class="error">' + resJsonObj.error.type + " : " + resJsonObj.error.message + '</p>');
+              addFailMessage(resJsonObj.error.type + " : " + resJsonObj.error.message);
               resFlag = false;
             }else{
               addResponseMessage(res);
@@ -170,26 +145,27 @@ $(document).ready(function() {
         }
       },
       success:function(res){
-        // 将最终回复添加到数组
-        if (resFlag) {
-          messages.push({"role": "assistant", "content": res})
+        // 是html,实体转回标签
+        if (checkHtmlFlag) {
+          setHtml();
+        }
+        // 判断是否是回复正确信息
+        if(resFlag){
+          messages.push({"role": "assistant", "content": res});
+          // 判断是否本地存储历史会话
+          if(localStorage.getItem('archiveSession')=="true"){
+            localStorage.setItem("session",JSON.stringify(messages));
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        addFailMessage('<p class="error">' + '出错啦！请稍后再试!' + '</p>');
+        addFailMessage('出错啦！请稍后再试!');
       },
       complete : function(XMLHttpRequest,status){
         // 收到回复，让按钮可点击
-         chatBtn.attr('disabled',false)
-         // 重新绑定键盘事件
-         chatInput.on("keydown",handleEnter); 
-         
-         if (checkHtmlFlag) {
-            let lastResponseElement = $(".message-bubble .response").last();
-            let lastResponseHtml = lastResponseElement.html();
-            let newLastResponseHtml = lastResponseHtml.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, "\"");
-            lastResponseElement.html(newLastResponseHtml);
-         }
+        chatBtn.attr('disabled',false)
+        // 重新绑定键盘事件
+        chatInput.on("keydown",handleEnter); 
       }
     });
   });
@@ -204,4 +180,165 @@ $(document).ready(function() {
 
   // 绑定Enter键盘事件
   chatInput.on("keydown",handleEnter);
+
+  // 设置栏宽度自适应
+  let width = $('.function .others').width();
+  $('.function .settings .dropdown-menu').css('width', width);
+  
+  $(window).resize(function() {
+    width = $('.function .others').width();
+    $('.function .settings .dropdown-menu').css('width', width);
+  });
+
+  
+  // 主题
+  function setBgColor(theme){
+    $(':root').attr('bg-theme', theme);
+    $('.settings-common .theme').val(theme);
+    // 定位在文档外的元素也同步主题色
+    $('.settings-common').css('background-color', 'var(--bg-color)');
+  }
+  
+  let theme = localStorage.getItem('theme');
+  // 如果之前选择了主题，则将其应用到网站中
+  if (theme) {
+    setBgColor(theme);
+  }else{
+    localStorage.setItem('theme', "light"); //默认的主题
+    theme = localStorage.getItem('theme');
+    setBgColor(theme);
+  }
+
+  // 监听主题选择的变化
+  $('.settings-common .theme').change(function() {
+    const selectedTheme = $(this).val();
+    localStorage.setItem('theme', selectedTheme);
+    $(':root').attr('bg-theme', selectedTheme);
+    // 定位在文档外的元素也同步主题色
+    $('.settings-common').css('background-color', 'var(--bg-color)');
+  });
+
+  // 读取apiKey
+  const apiKey = localStorage.getItem('apiKey');
+  if (apiKey) {
+     $(".settings-common .api-key").val(apiKey);
+  }
+
+  // apiKey输入框事件
+  $(".settings-common .api-key").blur(function() { 
+    const apiKey = $(this).val();
+    if(apiKey.length!=0){
+      localStorage.setItem('apiKey', apiKey);
+    }else{
+      localStorage.removeItem('apiKey');
+    }
+  })
+
+  // 是否保存历史对话
+  var archiveSession = localStorage.getItem('archiveSession');
+
+  // 初识化
+  if(archiveSession == null){
+    archiveSession = "false";
+    localStorage.setItem('archiveSession', archiveSession);
+  }
+  
+  if(archiveSession == "true"){
+    $("#chck-1").prop("checked", true);
+  }else{
+    $("#chck-1").prop("checked", false);
+  }
+
+  $('#chck-1').click(function() {
+    if ($(this).prop('checked')) {
+        // 开启状态的操作
+        localStorage.setItem('archiveSession', true);
+        if(messages.length != 0){
+          localStorage.setItem("session",JSON.stringify(messages));
+        }
+    } else {
+        // 关闭状态的操作
+        localStorage.setItem('archiveSession', false);
+        localStorage.removeItem("session");
+    }
+  });
+  
+  // 加载历史保存会话
+  if(archiveSession == "true"){
+    const messagesList = JSON.parse(localStorage.getItem("session"));
+    if(messagesList){
+      messages = messagesList;
+      $.each(messages, function(index, item) {
+        if (item.role === 'user') {
+          addRequestMessage(item.content)
+        } else if (item.role === 'assistant') {
+          addResponseMessage(item.content)
+          if(checkHtmlFlag) {
+            setHtml();
+          }
+        }
+      });
+    }
+  }
+
+  // 是否连续对话
+  var continuousDialogue = localStorage.getItem('continuousDialogue');
+
+  // 初识化
+  if(continuousDialogue == null){
+    continuousDialogue = "true";
+    localStorage.setItem('continuousDialogue', continuousDialogue);
+  }
+  
+  if(continuousDialogue == "true"){
+    $("#chck-2").prop("checked", true);
+  }else{
+    $("#chck-2").prop("checked", false);
+  }
+
+  $('#chck-2').click(function() {
+    if ($(this).prop('checked')) {
+        localStorage.setItem('continuousDialogue', true);
+    } else {
+        localStorage.setItem('continuousDialogue', false);
+    }
+  });
+
+  // 删除功能
+  $(".delete a").click(function(){
+    chatWindow.empty();
+    $(".answer .tips").css({"display":"flex"});
+    messages = [];
+    localStorage.removeItem("session");
+  });
+
+  // 截图功能
+  $(".screenshot a").click(function() {
+    // 创建副本元素
+    const clonedChatWindow = chatWindow.clone();
+    clonedChatWindow.css({
+      position: "absolute",
+      left: "-9999px",
+      overflow: "visible",
+      height: "auto"
+    });
+    $("body").append(clonedChatWindow);
+    // 截图
+    html2canvas(clonedChatWindow[0], {
+      allowTaint: false,
+      useCORS: true,
+      scrollY: 0,
+    }).then(function(canvas) {
+      // 将 canvas 转换成图片
+      const imgData = canvas.toDataURL('image/png');
+      // 创建下载链接
+      const link = document.createElement('a');
+      link.download = "screenshot_" + Math.floor(Date.now() / 1000) + ".png";
+      link.href = imgData;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      clonedChatWindow.remove();
+    });
+  });
 });

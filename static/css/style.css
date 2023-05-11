@@ -1,11 +1,41 @@
-*{
-  margin: 0;
-  padding: 0;
+:root[bg-theme='light'] {
+  --bg-color: white;
+}
+  
+:root[bg-theme='gray'] {
+  --bg-color: #42424670;
+}
+
+:root[bg-theme='light-red'] {
+  --bg-color: #eda8a8;
+}
+
+:root[bg-theme='light-blue'] {
+  --bg-color: #55609a;
+}
+
+:root[bg-theme='light-purple'] {
+  --bg-color: #c09ff9;
+}
+
+:root[bg-theme='light-green'] {
+  --bg-color: #91ecd1;
+}
+
+:root[bg-theme='light-yellow'] {
+  --bg-color: #e9e097;
+}
+
+body {
+  background-color: var(--bg-color);
 }
 
 @media screen and (max-width: 768px){
-  body{
+  .container {
     width: 100% !important;
+  }
+  .answer .others .common .settings-common span{
+    font-size: 85%;
   }
   .foot p:first-child{
     font-size: 14px !important;
@@ -15,42 +45,79 @@
   }
 }
 
-@media screen and (min-width: 768px){
-  body{
-    width: 80% !important;
-    margin: 0 auto;
+@media screen and (min-width: 1200px) {
+  .container {
+      width: 970px !important;
   }
 }
 
+
+@media screen and (min-width: 768px) {
+  #chatWindow::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  #chatWindow::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+  
+  #chatWindow::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+  }
+}
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+html,body{
+  height: 100%;
+  width: 100%;
+}
+
+body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+select,input{
+  border-color: #1ab394 !important;
+  opacity: .8;
+}  
+
+.box{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.title{
+  width: 100%;
+}
 .title h2{
   margin-bottom: 20px;
   color: #4aa593;
-  text-shadow:0px 0px 2px #7defd8;
 }
-
-.key{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-  border-radius: 5px;
-}
-
-.key input:focus {
-  border-color: #1ab394;
-}  
     
 .answer{
   width: 100%;
   position: relative;
-  height: 70vh;
+  height: 75vh;
 }
 
 .answer .tips{
-  display: block;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.answer .tips h3{
+.answer .tips h4{
   color:red;
 }
 
@@ -62,18 +129,144 @@
   width: 200px;
 }
 
+.answer .function{
+  padding: 0 15px;
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+}
+.answer .others{
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  padding: 0 15px;
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.answer .others .left,.right{
+  display: flex;
+}
+
+.answer .others .common{
+  width: 30px;
+  height: 30px;
+  display: flex;
+}
+
+.answer .others .common .settings-common{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.answer .others .common .settings-common:hover{
+  background-color: rgba(148,163,184,.2);
+}
+
+.answer .others .common .settings-common:last-child{
+  border-bottom: 0;
+}
+
+.answer .others .common .settings-common .ipt-common{
+  width: 60%;
+}
+
+.answer .others .common .settings-common span{
+  color: #1ab394;
+  cursor: default;
+}
+.answer .others .common .settings-common a{
+  font-size: 14px;
+  color: #1ab394;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* 按钮样式 */
+.chck-btn{
+  display: flex;
+  justify-content: center;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide the input */
+input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.check-trail {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(148,163,184,.4);
+  border-radius: 15px;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+.check-handler {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 34px;
+  height: 34px;
+  background: rgb(148 163 184 / 85%);
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.check-handler:before {
+  content: "×";
+  color: white;
+  font-weight: bold;
+}
+
+input[type="checkbox"]:checked + .check-trail {
+  background: #1ab394a3;
+}
+input[type="checkbox"]:checked + .check-trail .check-handler {
+  margin-left: 26px;
+  background: #1ab394;
+}
+input[type="checkbox"]:checked + .check-trail .check-handler::before {
+  content: "✔";
+}
+
+
+.answer .others .right .screenshot{
+  margin-right: 10px;
+}
+
+.answer .others .icon-style{
+  width:30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #1ab394;
+  cursor: pointer;
+}
+
+.answer .others .icon-style:hover{
+  background-color: rgba(26, 179, 148,.1);
+}
+
 .answer .ipt{
   display:flex;
   align-items: center;
-  position: absolute;
-  bottom: 20px;
-  margin: 0 15px;
   padding-right: 15px;
   border-radius: 10px;
-  width: calc(100% - 30px);
   height: 50px;
-  border: 1px solid #e7eaec;
-  box-shadow: 0px 0px 10px 0px rgba(154, 152, 152, 0.2);
+  border: 1px solid rgba(26, 179, 148, 0.8);
+  box-shadow: 0px 0px 10px 0px rgba(26, 179, 148, 0.2);
 }
 .answer .ipt textarea {
   resize: none;
@@ -87,7 +280,7 @@
 }
 
 .answer #chatWindow {
-  max-height: calc(70vh - 100px);
+  max-height: calc(75vh - 100px);
   height:auto;
   overflow-y: auto;
 }
@@ -130,13 +323,7 @@
 }
 
 .message-bubble .response .loading-icon{
-  display: block;
-  width:35px;
-  height:35px;
-  background-image: url(../images/loading.gif);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+  color: #1ab394;
 }
 
 .answer #chatBtn{
@@ -146,6 +333,7 @@
 
 .foot p:first-child{
   margin-bottom: 10px;
+  opacity: .9;
 }
 
 .foot p:nth-child(2){
@@ -153,8 +341,9 @@
 }
 
 .foot p a{
+  margin-right: 10px;
   font-weight: 400;
   font-size: 14px;
-  color:red;
+  color:#1ab394;
   text-decoration:none;
 }

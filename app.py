@@ -14,10 +14,10 @@ def index():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    messages = request.form.get("prompt", None)
+    messages = request.form.get("prompts", None)
     apiKey = request.form.get("apiKey", None)
     if messages is None:
-        return jsonify({"error": {"message": "请输入prompt!", "type": "invalid_request_error"}})
+        return jsonify({"error": {"message": "请输入prompts!", "type": "invalid_request_error"}})
 
     if apiKey is None:
         apiKey = app.config['OPENAI_API_KEY']
@@ -28,19 +28,28 @@ def chat():
     }
 
     # json串转对象
-    prompt = json.loads(messages)
+    prompts = json.loads(messages)
 
     data = {
-        "messages": prompt,
+        "messages": prompts,
         "model": "gpt-3.5-turbo",
-        "max_tokens": 2048,
+        "max_tokens": 1024,
         "temperature": 0.5,
         "top_p": 1,
         "n": 1,
         "stream": True,
     }
 
-    resp = requests.post(url=app.config["URL"], headers=headers, json=data, stream=True)
+    try:
+        resp = requests.post(
+            url=app.config["URL"],
+            headers=headers,
+            json=data,
+            stream=True,
+            timeout=(10, 10)  # 连接超时时间为10秒，读取超时时间为10秒
+        )
+    except TimeoutError:
+        return jsonify({"error": {"message": "请求超时!", "type": "timeout_error"}})
 
     # 迭代器实现流式响应
     def generate():
@@ -48,7 +57,6 @@ def chat():
         for chunk in resp.iter_lines():
             if chunk:
                 streamStr = chunk.decode("utf-8").replace("data: ", "")
-                # print(streamStr)
                 try:
                     streamDict = json.loads(streamStr)  # 说明出现返回信息不是正常数据,是接口返回的具体错误信息
                 except:
