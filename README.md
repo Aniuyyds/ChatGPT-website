@@ -26,8 +26,9 @@
  4. 可选择是否开启上下文连续对话，默认开启，可在页面设置中关闭。
  5. 添加删除按钮，可自己清空页面对话。
  6. 添加截图保存按钮，可点击将对话数据保存为图片。
- 7. 上下文对话状态下为节约 `tokens` ，当对话超过4轮后，则选取最新3轮作为上下文发送。为避免有人不点击删除按钮而导致页面积累大量对话，跟 `New Bing` 一样，当上下文对话超过20轮，则无法继续发送，会提示点击删除按钮清空页面数据！
- 8. 美化页面，优化页面布局使得不同设备更好的自适应。
+ 7. 加入语法高亮功能，同时markdown代码块实时转html标签。
+ 8. 上下文对话状态下为节约 `tokens` ，当对话超过4轮后，则选取最新3轮作为上下文发送。为避免有人不点击删除按钮而导致页面积累大量对话，跟 `New Bing` 一样，当上下文对话超过20轮，则无法继续发送，会提示点击删除按钮清空页面数据！
+ 9. 美化页面，优化页面布局使得不同设备更好的自适应。
 
 ## 注意
 
@@ -47,16 +48,22 @@
 
 ### PC端
 
-![示例图一](./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E7%94%B5%E8%84%91%E7%AB%AF%E5%9B%BE%E7%89%87%E4%B8%80.png)
+<table>
+    <tr>
+        <td ><center><img src="./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E7%94%B5%E8%84%91%E7%AB%AF%E5%9B%BE%E7%89%87%E4%B8%80.png" width="450">图1</center></td>
+        <td ><center><img src="./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E7%94%B5%E8%84%91%E7%AB%AF%E5%9B%BE%E7%89%87%E4%BA%8C.png" width="400">图2</center></td>
+    </tr>
+    <tr>
+        <td ><center><img src="./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E7%94%B5%E8%84%91%E7%AB%AF%E5%9B%BE%E7%89%87%E4%B8%89.png" width="400">图3</center></td>
+        <td ><center><img src="./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E7%94%B5%E8%84%91%E7%AB%AF%E5%9B%BE%E7%89%87%E5%9B%9B.png" width="400">图4</center></td>
+    </tr>
+</table>
 
----
+### 手机端
 
-![示例图二](./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E7%94%B5%E8%84%91%E7%AB%AF%E5%9B%BE%E7%89%87%E4%BA%8C.png)
-
----
-
-![示例图三](./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E7%94%B5%E8%84%91%E7%AB%AF%E5%9B%BE%E7%89%87%E4%B8%89.png)
-
----
-
-![示例图四](./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E7%94%B5%E8%84%91%E7%AB%AF%E5%9B%BE%E7%89%87%E5%9B%9B.png)
+<table>
+    <tr>
+        <td ><center><img src="./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E6%89%8B%E6%9C%BA%E7%AB%AF%E5%9B%BE%E4%B8%80.png" width="400">图1</center></td>
+        <td ><center><img src="./%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B%E5%9B%BE/%E6%89%8B%E6%9C%BA%E7%AB%AF%E5%9B%BE%E4%BA%8C.png" width="400">图2</center></td>
+    </tr>
+</table>

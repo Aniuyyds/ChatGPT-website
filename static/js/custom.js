@@ -4,11 +4,16 @@ $(document).ready(function() {
   var chatInput = $('#chatInput');
   var chatWindow = $('#chatWindow');
   
-  // 存储对话信息,实现连续对话
+  // 全局变量,存储对话信息
   var messages = [];
 
-  // 检测是否是html代码的标志变量
-  var checkHtmlFlag = false;
+  // marked.js设置语法高亮
+  marked.setOptions({
+    highlight: function (code, language) {
+        const validLanguage = hljs.getLanguage(language) ? language : 'javascript';
+        return hljs.highlight(code, { language: validLanguage }).value;
+    },
+  });
 
   // 转义html代码(对应字符转移为html实体)，防止在浏览器渲染
   function escapeHtml(html) {
@@ -18,19 +23,6 @@ $(document).ready(function() {
     return div.innerHTML;
   }
 
-  // 判断输出内容是否包含html标签
-  function checkHtmlTag(str) {
-    let pattern = /<\s*\/?\s*[a-z]+(?:\s+[a-z]+=(?:"[^"]*"|'[^']*'))*\s*\/?\s*>/i;  // 匹配HTML标签的正则表达式
-    return pattern.test(str); // 返回匹配结果
-  }
-
-  // html实体转标签
-  function setHtml(){
-    let lastResponseElement = $(".message-bubble .response").last();
-    let lastResponseHtml = lastResponseElement.html();
-    let newLastResponseHtml = lastResponseHtml.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, "\"");
-    lastResponseElement.html(newLastResponseHtml);
-  }
   
   // 添加请求消息到窗口
   function addRequestMessage(message) {
@@ -44,17 +36,25 @@ $(document).ready(function() {
     chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
   }
   
+
   // 添加响应消息到窗口,流式响应此方法会执行多次
   function addResponseMessage(message) {
     let lastResponseElement = $(".message-bubble .response").last();
     lastResponseElement.empty();
     let escapedMessage;
-    if(checkHtmlTag(message)){  // 如果是html代码
-      escapedMessage = marked(escapeHtml(message)); 
-      checkHtmlFlag = true;
-    }else{
-      escapedMessage = marked(message);  // 响应消息markdown实时转换为html
-      checkHtmlFlag = false;
+    // 处理流式消息中的代码块
+    let codeMarkCount = 0;
+    let index = message.indexOf('```');
+    while (index !== -1) {
+        codeMarkCount ++ ;
+        index = message.indexOf('```', index + 3);
+    }
+    if(codeMarkCount % 2 == 1  ){  // 有未闭合的 code
+      escapedMessage = marked.parse(message + '\n\n```'); 
+    }else if(codeMarkCount % 2 == 0 && codeMarkCount != 0){
+      escapedMessage = marked.parse(message);  // 响应消息markdown实时转换为html
+    }else if(codeMarkCount == 0){  // 输出的代码有可能不是markdown格式，所以只要没有markdown代码块的内容，都用escapeHtml处理后再转换
+      escapedMessage = marked.parse(escapeHtml(message));
     }
     lastResponseElement.append(escapedMessage);
     chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
@@ -145,10 +145,6 @@ $(document).ready(function() {
         }
       },
       success:function(res){
-        // 是html,实体转回标签
-        if (checkHtmlFlag) {
-          setHtml();
-        }
         // 判断是否是回复正确信息
         if(resFlag){
           messages.push({"role": "assistant", "content": res});
@@ -237,7 +233,7 @@ $(document).ready(function() {
   // 是否保存历史对话
   var archiveSession = localStorage.getItem('archiveSession');
 
-  // 初识化
+  // 初始化archiveSession
   if(archiveSession == null){
     archiveSession = "false";
     localStorage.setItem('archiveSession', archiveSession);
@@ -273,9 +269,6 @@ $(document).ready(function() {
           addRequestMessage(item.content)
         } else if (item.role === 'assistant') {
           addResponseMessage(item.content)
-          if(checkHtmlFlag) {
-            setHtml();
-          }
         }
       });
     }
@@ -284,7 +277,7 @@ $(document).ready(function() {
   // 是否连续对话
   var continuousDialogue = localStorage.getItem('continuousDialogue');
 
-  // 初识化
+  // 初始化continuousDialogue
   if(continuousDialogue == null){
     continuousDialogue = "true";
     localStorage.setItem('continuousDialogue', continuousDialogue);

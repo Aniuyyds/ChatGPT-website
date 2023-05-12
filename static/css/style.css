@@ -77,24 +77,17 @@ html,body{
   width: 100%;
 }
 
-body{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 select,input{
   border-color: #1ab394 !important;
   opacity: .8;
 }  
 
-.box{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+pre{
+  color: #adbac7 !important;
+  background: #2b2a2a !important;
 }
+
+
 .title{
   width: 100%;
 }

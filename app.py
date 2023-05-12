@@ -63,7 +63,7 @@ def chat():
                     errorStr += streamStr.strip()  # 错误流式数据累加
                     continue
                 delData = streamDict["choices"][0]
-                if delData["finish_reason"] == "stop":
+                if delData["finish_reason"] != None :
                     break
                 else:
                     if "content" in delData["delta"]:
