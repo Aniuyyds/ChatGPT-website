@@ -46,8 +46,8 @@ $(document).ready(function() {
     let codeMarkCount = 0;
     let index = message.indexOf('```');
     while (index !== -1) {
-        codeMarkCount ++ ;
-        index = message.indexOf('```', index + 3);
+      codeMarkCount ++ ;
+      index = message.indexOf('```', index + 3);
     }
     if(codeMarkCount % 2 == 1  ){  // 有未闭合的 code
       escapedMessage = marked.parse(message + '\n\n```'); 
@@ -134,7 +134,7 @@ $(document).ready(function() {
           try{
             resJsonObj = JSON.parse(res);  // 只有错误信息是json类型字符串,且一次返回
             if(resJsonObj.hasOwnProperty("error")){
-              addFailMessage(resJsonObj.error.type + " : " + resJsonObj.error.message);
+              addFailMessage(resJsonObj.error.type + " : " + resJsonObj.error.message + resJsonObj.error.code);
               resFlag = false;
             }else{
               addResponseMessage(res);
@@ -153,6 +153,8 @@ $(document).ready(function() {
             localStorage.setItem("session",JSON.stringify(messages));
           }
         }
+        // 添加复制
+        copy();
       },
       error: function(jqXHR, textStatus, errorThrown) {
         addFailMessage('出错啦！请稍后再试!');
@@ -217,7 +219,7 @@ $(document).ready(function() {
   // 读取apiKey
   const apiKey = localStorage.getItem('apiKey');
   if (apiKey) {
-     $(".settings-common .api-key").val(apiKey);
+    $(".settings-common .api-key").val(apiKey);
   }
 
   // apiKey输入框事件
@@ -247,15 +249,15 @@ $(document).ready(function() {
 
   $('#chck-1').click(function() {
     if ($(this).prop('checked')) {
-        // 开启状态的操作
-        localStorage.setItem('archiveSession', true);
-        if(messages.length != 0){
-          localStorage.setItem("session",JSON.stringify(messages));
-        }
+      // 开启状态的操作
+      localStorage.setItem('archiveSession', true);
+      if(messages.length != 0){
+        localStorage.setItem("session",JSON.stringify(messages));
+      }
     } else {
-        // 关闭状态的操作
-        localStorage.setItem('archiveSession', false);
-        localStorage.removeItem("session");
+      // 关闭状态的操作
+      localStorage.setItem('archiveSession', false);
+      localStorage.removeItem("session");
     }
   });
   
@@ -271,6 +273,8 @@ $(document).ready(function() {
           addResponseMessage(item.content)
         }
       });
+      // 添加复制
+      copy();
     }
   }
 
@@ -291,9 +295,9 @@ $(document).ready(function() {
 
   $('#chck-2').click(function() {
     if ($(this).prop('checked')) {
-        localStorage.setItem('continuousDialogue', true);
+       localStorage.setItem('continuousDialogue', true);
     } else {
-        localStorage.setItem('continuousDialogue', false);
+       localStorage.setItem('continuousDialogue', false);
     }
   });
 
@@ -334,4 +338,35 @@ $(document).ready(function() {
       clonedChatWindow.remove();
     });
   });
+
+  // 复制代码功能
+  function copy(){
+    $('pre').each(function() {
+      let btn = $('<button class="copy-btn">复制</button>');
+      $(this).append(btn);
+      btn.hide();
+    });
+
+    $('pre').hover(
+      function() {
+        $(this).find('.copy-btn').show();
+      },
+      function() {
+        $(this).find('.copy-btn').hide();
+      }
+    );
+
+    $('pre').on('click', '.copy-btn', async function() {
+      let text = $(this).siblings('code').text();
+      try {
+        await navigator.clipboard.writeText(text);
+        $(this).text('复制成功');
+      } catch (e) {
+        $(this).text('复制失败');
+      }
+      setTimeout(() => {
+        $(this).text('复制');
+      }, 2000);
+    });
+  }
 });

@@ -78,6 +78,5 @@ def chat():
 
     return Response(generate(), content_type='application/octet-stream')
 
-
 if __name__ == '__main__':
     app.run(port=5000)
