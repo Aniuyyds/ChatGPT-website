@@ -356,14 +356,27 @@ $(document).ready(function() {
       }
     );
 
-    $('pre').on('click', '.copy-btn', async function() {
+    $('pre').on('click', '.copy-btn', function() {
       let text = $(this).siblings('code').text();
+      // 创建一个临时的 textarea 元素
+      let textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+
+      // 选择 textarea 中的文本
+      textArea.select();
+
+      // 执行复制命令
       try {
-        await navigator.clipboard.writeText(text);
+        document.execCommand('copy');
         $(this).text('复制成功');
       } catch (e) {
         $(this).text('复制失败');
       }
+
+      // 从文档中删除临时的 textarea 元素
+      document.body.removeChild(textArea);
+
       setTimeout(() => {
         $(this).text('复制');
       }, 2000);
