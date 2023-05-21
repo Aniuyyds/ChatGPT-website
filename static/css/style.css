@@ -34,6 +34,9 @@ body {
   .container {
     width: 100% !important;
   }
+  .answer{
+    height: calc(100vh - 145px) !important;
+  }
   .answer .others .common .settings-common span{
     font-size: 85%;
   }
@@ -56,11 +59,11 @@ body {
   #chatWindow::-webkit-scrollbar {
     width: 3px;
   }
-  
+
   #chatWindow::-webkit-scrollbar-track {
     background-color: #f1f1f1;
   }
-  
+
   #chatWindow::-webkit-scrollbar-thumb {
     background-color: #888;
     border-radius: 4px;
@@ -80,7 +83,7 @@ html,body{
 .form-control{
   border-color: #1ab394 !important;
   padding: 6px 6px !important;
-} 
+}
 
 pre{
   position: relative;
@@ -103,15 +106,16 @@ pre{
 .title{
   width: 100%;
 }
+
 .title h2{
   margin-bottom: 20px;
   color: #4aa593;
 }
-    
+
 .answer{
   width: 100%;
   position: relative;
-  height: 75vh;
+  height: calc(100vh - 165px);
 }
 
 .answer .tips{
@@ -286,7 +290,7 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 }
 
 .answer #chatWindow {
-  max-height: calc(75vh - 100px);
+  max-height: calc(100% - 100px);
   height:auto;
   overflow-y: auto;
 }
