@@ -126,7 +126,6 @@ $(document).ready(function() {
       url: '/chat',
       method: 'POST',
       data: data,
-      timeout: 1000 * 60,
       xhrFields: {
         onprogress: function(e) {
           let res = e.target.responseText;
