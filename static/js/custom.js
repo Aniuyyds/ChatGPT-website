@@ -327,6 +327,7 @@ $(document).ready(function() {
       position: "absolute",
       left: "-9999px",
       overflow: "visible",
+      width: chatWindow.width(),
       height: "auto"
     });
     $("body").append(clonedChatWindow);
