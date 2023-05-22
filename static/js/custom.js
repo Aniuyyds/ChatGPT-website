@@ -7,12 +7,23 @@ $(document).ready(function() {
   // 全局变量,存储对话信息
   var messages = [];
 
-  // marked.js设置语法高亮
+  // 创建自定义渲染器
+  const renderer = new marked.Renderer();
+
+  // 重写list方法
+  renderer.list = function(body, ordered, start) {
+    const type = ordered ? 'ol' : 'ul';
+    const startAttr = (ordered && start) ? ` start="${start}"` : '';
+    return `<${type}${startAttr}>\n${body}</${type}>\n`;
+  };
+
+  // 设置marked选项
   marked.setOptions({
+    renderer: renderer,
     highlight: function (code, language) {
-        const validLanguage = hljs.getLanguage(language) ? language : 'javascript';
-        return hljs.highlight(code, { language: validLanguage }).value;
-    },
+      const validLanguage = hljs.getLanguage(language) ? language : 'javascript';
+      return hljs.highlight(code, { language: validLanguage }).value;
+    }
   });
 
   // 转义html代码(对应字符转移为html实体)，防止在浏览器渲染
