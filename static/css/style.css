@@ -256,7 +256,7 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 }
 
 .answer .others .center .stop{
-  border: 1px solid rgba(179, 46, 26, 0.5);
+  border: 1px solid rgba(241, 41, 11, 0.8);
   border-radius: 5px;
   opacity: .8;
   width: 60px;
