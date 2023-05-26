@@ -170,8 +170,6 @@ $(document).ready(function() {
             localStorage.setItem("session",JSON.stringify(messages));
           }
         }
-        // 添加复制
-        copy();
       },
       error: function(jqXHR, textStatus, errorThrown) {
         if (textStatus === 'abort') {
@@ -189,7 +187,9 @@ $(document).ready(function() {
         // 重新绑定键盘事件
         chatInput.on("keydown",handleEnter); 
         ajaxRequest = null;
-        $(".answer .others .center").css("display","none")
+        $(".answer .others .center").css("display","none");
+        // 添加复制
+        copy();
       }
     });
   });
