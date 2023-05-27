@@ -18,7 +18,7 @@ def chat():
     apiKey = request.form.get("apiKey", None)
     model = request.form.get("model", "gpt-3.5-turbo")
     if messages is None:
-        return jsonify({"error": {"message": "请输入prompts!", "type": "invalid_request_error"}})
+        return jsonify({"error": {"message": "请输入prompts！", "type": "invalid_request_error", "code": ""}})
 
     if apiKey is None:
         apiKey = app.config['OPENAI_API_KEY']
@@ -49,8 +49,8 @@ def chat():
             stream=True,
             timeout=(10, 10)  # 连接超时时间为10秒，读取超时时间为10秒
         )
-    except TimeoutError:
-        return jsonify({"error": {"message": "请求超时!", "type": "timeout_error"}})
+    except requests.exceptions.Timeout:
+        return jsonify({"error": {"message": "请求超时，请稍后再试！", "type": "timeout_error", "code": ""}})
 
     # 迭代器实现流式响应
     def generate():

@@ -312,20 +312,23 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 }
 
 .answer #chatWindow {
+  width: 100%;
   max-height: calc(100% - 100px);
   height:auto;
   overflow-y: auto;
 }
 
 .message-bubble {
-  padding: 10px;
-  margin: 5px;
+  padding: 5px;
+  margin: 10px;
   display: flex;
   align-items: flex-start;
   border-bottom: 1px dashed #e7eaec;
 }
 
 .message-bubble .message-text{
+  width: auto;
+  max-width: calc(100% - 45px);
   font-size: 18px;
   margin-left:15px;
   word-break: break-all;
@@ -352,6 +355,17 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   width: 30px;
   height: 30px;
   border-radius: 3px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.message-bubble .request-icon{
+  background-image: url(../images/avatar.png);
+}
+
+.message-bubble .response-icon{
+ background-image: url(../images/chatgpt.png);
 }
 
 .message-bubble .response .loading-icon{
