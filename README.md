@@ -3,20 +3,16 @@
 ## 介绍
 
 简易版 `ChatGPT` 网站，拿来即用，适合小白，让你十分钟搭建属于自己的 `ChatGPT` 问答机器人！
-
-## 安装教程
-
-本项目后端用 `flask` 快速搭建，可使用宝塔面板中的python项目管理器快速部署！
+本项目是`ChatGPT-website`的镜像地址，只用于使用`render` 部署！
+其他部署方式请访问原仓库：https://gitee.com/aniu-666/chat-gpt-website
 
 ## 使用说明
 
-1. 本项目支持 `GPT-3.5-turbo` 和 `GPT-4`，支持记录上下文实现连续对话！
+1. 本项目后端用 `flask` 快速搭建，可使用`render` 云平台快速免费部署！
 
-2. 本项目支持流式响应，`markdown` 实时转换为 `html`！
+2. 本项目支持 `GPT-3.5-turbo` 和 `GPT-4`，支持记录上下文实现连续对话！
 
-3. 由于 `OpenAI` 的 `api` 地区限制问题，项目部署请使用国外服务器，本项目使用现成开源 api 代理，只需替换 api 域名，可在大陆服务器部署。（使用 `OpenAI` 官方 `api` 在本地跑此项目，使用代理对于 `python` 可能会出现 `ssl error` 问题，因此不建议在国内服务器上使用代理软件，建议使用现成的代理或者直接部署到国外服务器）。
-
-4. 使用现有开源 `api` 代理，则只需在 `settings.py` 配置文件中加入自己的 `OpenAI`  的 `api key` 即可，然后部署到大陆服务器就行！如有条件部署到国外服务器，请使用 `settings.py` 配置文件中的 `OpenAI` 官方 `api` 接口。
+3. 本项目支持流式响应，`markdown` 实时转换为 `html`！
 
 ## 23 年 5.12 日更新
 
@@ -44,7 +40,7 @@
 3. 项目使用开源代理：[https://github.com/geekr-dev/openai-proxy](https://github.com/geekr-dev/openai-proxy) ，点个 `star` 支持作者
 4. 此项目适合小白，主打简洁，可不断完善！
 5. 对于项目如有疑问，可加下面 `QQ` 群交流！
-6. 部署教程：https://blog.csdn.net/qq_57421630/article/details/129913170
+6. 部署教程（零成本部署）：https://guanzhu-aniu.blog.csdn.net/article/details/130912951
 7. 项目纯前端版本（零成本部署）：https://gitee.com/aniu-666/chat-gpt-website/tree/web/
 
 ## 学习交流 
