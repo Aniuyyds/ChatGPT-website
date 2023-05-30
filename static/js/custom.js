@@ -67,8 +67,12 @@ $(document).ready(function() {
       escapedMessage = marked.parse(message + '\n\n```'); 
     }else if(codeMarkCount % 2 == 0 && codeMarkCount != 0){
       escapedMessage = marked.parse(message);  // 响应消息markdown实时转换为html
-    }else if(codeMarkCount == 0){  // 输出的代码有可能不是markdown格式，所以只要没有markdown代码块的内容，都用escapeHtml处理后再转换
-      escapedMessage = marked.parse(escapeHtml(message));
+    }else if(codeMarkCount == 0){  // 输出的代码没有markdown代码块
+      if (message.includes('`')){
+        escapedMessage = marked.parse(message);  // 没有markdown代码块，但有代码段，依旧是markdown格式
+      }else{
+        escapedMessage = marked.parse(escapeHtml(message)); // 有可能不是markdown格式，都用escapeHtml处理后再转换，防止非markdown格式html紊乱页面
+      }
     }
     lastResponseElement.append(escapedMessage);
     chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
