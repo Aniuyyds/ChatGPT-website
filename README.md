@@ -3,9 +3,10 @@
 ## 介绍
 
 简易版 `ChatGPT` 网站，拿来即用，适合小白，让你十分钟搭建属于自己的 `ChatGPT` 问答机器人！
-本项目是`ChatGPT-website`的镜像地址，只用于使用`render` 部署！
-其他部署方式请访问原仓库：https://gitee.com/aniu-666/chat-gpt-website
 
+本项目是`ChatGPT-website`的镜像地址，只用于使用`render` 部署！
+
+其他部署方式请访问原仓库：https://gitee.com/aniu-666/chat-gpt-website , 欢迎点 Star ! 
 ## 使用说明
 
 1. 本项目后端用 `flask` 快速搭建，可使用`render` 云平台快速免费部署！
@@ -37,10 +38,9 @@
 
 1. 开发不易，拒绝白嫖，如果此小项目帮助到了您，希望能得到您的 `star` ！
 2. 页面可任各位修改，希望留下项目地址，为此项目吸引更多的 `star` !
-3. 项目使用开源代理：[https://github.com/geekr-dev/openai-proxy](https://github.com/geekr-dev/openai-proxy) ，点个 `star` 支持作者
-4. 此项目适合小白，主打简洁，可不断完善！
-5. 对于项目如有疑问，可加下面 `QQ` 群交流！
-6. 部署教程（零成本部署）：https://guanzhu-aniu.blog.csdn.net/article/details/130912951
+3. 此项目适合小白，主打简洁，可不断完善！
+4. 对于项目如有疑问，可加下面 `QQ` 群交流！
+5. 部署教程（零成本部署）：https://github.com/Aniuyyds/ChatGPT-website/blob/master/%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B/%E6%95%99%E7%A8%8B.md
 7. 项目纯前端版本（零成本部署）：https://gitee.com/aniu-666/chat-gpt-website/tree/web/
 
 ## 学习交流 
