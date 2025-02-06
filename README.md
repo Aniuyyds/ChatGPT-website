@@ -2,18 +2,20 @@
 
 ## 介绍
 
-简易版 `ChatGPT` 网站，拿来即用，适合小白，让你十分钟搭建属于自己的 `ChatGPT` 问答机器人！
+简易版 `ChatGPT` 网站，拿来即用，适合小白，让你十分钟搭建属于自己的 `ChatGPT` 问答机器人, 适配各种Ai模型！
 
-本项目是`ChatGPT-website`的镜像地址，只用于使用`render` 部署！
+本项目是`ChatGPT-website`的镜像地址，只用于使用`render` 免费部署（只是在requirements.txt中加了指定版本的gunicon）！
 
 其他部署方式请访问原仓库：https://gitee.com/aniu-666/chat-gpt-website , 欢迎点 Star ! 
 ## 使用说明
 
 1. 本项目后端用 `flask` 快速搭建，可使用`render` 云平台快速免费部署！
 
-2. 本项目支持 `GPT-3.5-turbo` 和 `GPT-4`，支持记录上下文实现连续对话！
+2. 本项目支持 `GPT-3.5-turbo` 和 `GPT-4`等和其他Ai模型，支持记录上下文实现连续对话！
 
 3. 本项目支持流式响应，`markdown` 实时转换为 `html`！
+
+4. python 版本建议使用3.8.5。
 
 ## 23 年 5.12 日更新
 
@@ -33,6 +35,9 @@
  1. 修复截图宽度很宽的问题。
  2. 添加 `GPT-4` 模型，需要有 `gpt-4` 权限的 `api key`。
  3. 添加停止响应按钮，输出结果不满意可停止响应。
+
+## 25 年 2.06 日更新
+ 1. 新增deepseek R1推理过程。
 
 ## 注意
 
