@@ -101,6 +101,12 @@ $(document).ready(function() {
 
     // 判断消息是否是正常的标志变量
     let resFlag = true;
+
+    // 判断是否使用中转代理api
+    let apiUrl = localStorage.getItem('apiUrl');
+    if (apiUrl){
+      data.apiUrl = apiUrl;
+    }
    
     // 判断是否使用自己的api key
     let apiKey = localStorage.getItem('apiKey');
@@ -252,6 +258,35 @@ $(document).ready(function() {
     // 定位在文档外的元素也同步主题色
     $('.settings-common').css('background-color', 'var(--bg-color)');
   });
+
+  // 读取模型配置
+  const model = localStorage.getItem('model');
+  if (model) {
+    $(".settings-common .model").val(model);
+  }
+
+  // 监听模型选择的变化
+  $('.settings-common .model').change(function() {
+    const model = $(this).val();
+    localStorage.setItem('model', model);
+  });
+
+  // 读取apiUrl
+  const apiUrl = localStorage.getItem('apiUrl');
+  if (apiUrl) {
+    $(".settings-common .api-url").val(apiUrl);
+  }
+
+  // apiUrl输入框事件
+  $(".settings-common .api-url").blur(function() {
+    const apiUrl = $(this).val();
+    if(apiUrl.length!=0){
+      localStorage.setItem('apiUrl', apiUrl);
+    }else{
+      localStorage.removeItem('apiUrl');
+    }
+  })
+
 
   // 读取apiKey
   const apiKey = localStorage.getItem('apiKey');
